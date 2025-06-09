@@ -1,0 +1,2 @@
+# model_matematika_dalam_industri
+tugas kelompok
