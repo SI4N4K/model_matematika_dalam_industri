@@ -1,6 +1,4 @@
 streamlit
-sympy
 numpy
 matplotlib
 pulp
-sqrt
