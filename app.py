@@ -90,13 +90,13 @@ with tab2:  # EOQ Model
                           format="%d",
                           help="Jumlah total unit yang dibutuhkan per tahun")
     with col2:
-        S = st.number_input("Biaya Pemesanan ($/pesan)", 
+        S = st.number_input("Biaya Pemesanan (Rp./pesan)", 
                           value=10.0, 
                           step=1.0,
                           format="%.2f",
                           help="Biaya tetap per pesanan")
     with col3:
-        H = st.number_input("Biaya Penyimpanan ($/unit/tahun)", 
+        H = st.number_input("Biaya Penyimpanan (Rp./unit/tahun)", 
                           value=0.5, 
                           step=0.1,
                           format="%.2f",
@@ -114,7 +114,7 @@ with tab2:  # EOQ Model
     ax.plot(q_values, tc_values, label='Total Biaya', color='#1f77b4', linewidth=2)
     ax.axvline(Q, color='#ff7f0e', linestyle='--', linewidth=2, label='EOQ')
     ax.set_xlabel("Jumlah Pesanan", fontsize=10)
-    ax.set_ylabel("Biaya Total ($)", fontsize=10)
+    ax.set_ylabel("Biaya Total (Rp.)", fontsize=10)
     ax.set_title("Optimasi Biaya Inventory", fontsize=12, pad=20)
     ax.legend(frameon=True, facecolor='#f0f0f0')
     ax.grid(True, linestyle='--', alpha=0.7)
@@ -126,7 +126,7 @@ with tab2:  # EOQ Model
     with result_col1:
         st.metric(label="**EOQ Optimal**", value=f"{Q:.2f} unit")
     with result_col2:
-        st.metric(label="**Biaya Total Minimum**", value=f"${TC:.2f}")
+        st.metric(label="**Biaya Total Minimum**", value=f"Rp.{TC:.2f}")
 
     st.pyplot(fig)
 
