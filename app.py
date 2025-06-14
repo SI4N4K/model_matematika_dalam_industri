@@ -72,64 +72,63 @@ with tab1:  # Linear Programming
     st.pyplot(fig)
 
 with tab2:  # EOQ Model
-st.header("📦 Kalkulator EOQ", divider="rainbow")
-with st.expander("ℹ️ Tentang Aplikasi"):
-    st.write("""
-    Aplikasi ini menghitung Economic Order Quantity (EOQ) dan visualisasi biaya total
-    menggunakan rumus:  
-    **EOQ** = √(2DS/H)  
-    **Total Cost** = (D/Q)S + (Q/2)H
-    """)
+    st.header("📦 Kalkulator EOQ", divider="rainbow")
+    with st.expander("ℹ️ Tentang Aplikasi"):
+        st.write("""
+        Aplikasi ini menghitung Economic Order Quantity (EOQ) dan visualisasi biaya total
+        menggunakan rumus:  
+        **EOQ** = √(2DS/H)  
+        **Total Cost** = (D/Q)S + (Q/2)H
+        """)
 
-# ================== INPUT SECTION ==================
-col1, col2, col3 = st.columns(3)
-with col1:
-    D = st.number_input("Permintaan Tahunan (unit)", 
-                      value=1000, 
-                      step=100,
-                      format="%d",
-                      help="Jumlah total unit yang dibutuhkan per tahun")
-with col2:
-    S = st.number_input("Biaya Pemesanan ($/pesan)", 
-                      value=10.0, 
-                      step=1.0,
-                      format="%.2f",
-                      help="Biaya tetap per pesanan")
-with col3:
-    H = st.number_input("Biaya Penyimpanan ($/unit/tahun)", 
-                      value=0.5, 
-                      step=0.1,
-                      format="%.2f",
-                      help="Biaya penyimpanan per unit per tahun")
+    # ================== INPUT SECTION ==================
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        D = st.number_input("Permintaan Tahunan (unit)", 
+                          value=1000, 
+                          step=100,
+                          format="%d",
+                          help="Jumlah total unit yang dibutuhkan per tahun")
+    with col2:
+        S = st.number_input("Biaya Pemesanan ($/pesan)", 
+                          value=10.0, 
+                          step=1.0,
+                          format="%.2f",
+                          help="Biaya tetap per pesanan")
+    with col3:
+        H = st.number_input("Biaya Penyimpanan ($/unit/tahun)", 
+                          value=0.5, 
+                          step=0.1,
+                          format="%.2f",
+                          help="Biaya penyimpanan per unit per tahun")
 
-# ================== CALCULATION SECTION ==================
-Q = sqrt((2*D*S)/H)
-TC = (D/Q)*S + (Q/2)*H
+    # ================== CALCULATION SECTION ==================
+    Q = sqrt((2*D*S)/H)
+    TC = (D/Q)*S + (Q/2)*H
 
-# ================== VISUALIZATION SECTION ==================
-q_values = np.linspace(Q*0.5, Q*1.5, 100)
-tc_values = (D/q_values)*S + (q_values/2)*H
+    # ================== VISUALIZATION SECTION ==================
+    q_values = np.linspace(Q*0.5, Q*1.5, 100)
+    tc_values = (D/q_values)*S + (q_values/2)*H
 
-fig, ax = plt.subplots(figsize=(8,5))
-ax.plot(q_values, tc_values, label='Total Biaya', color='#1f77b4', linewidth=2)
-ax.axvline(Q, color='#ff7f0e', linestyle='--', linewidth=2, label='EOQ')
-ax.set_xlabel("Jumlah Pesanan", fontsize=10)
-ax.set_ylabel("Biaya Total ($)", fontsize=10)
-ax.set_title("Optimasi Biaya Inventory", fontsize=12, pad=20)
-ax.legend(frameon=True, facecolor='#f0f0f0')
-ax.grid(True, linestyle='--', alpha=0.7)
-ax.set_facecolor('#f5f5f5')
+    fig, ax = plt.subplots(figsize=(8,5))
+    ax.plot(q_values, tc_values, label='Total Biaya', color='#1f77b4', linewidth=2)
+    ax.axvline(Q, color='#ff7f0e', linestyle='--', linewidth=2, label='EOQ')
+    ax.set_xlabel("Jumlah Pesanan", fontsize=10)
+    ax.set_ylabel("Biaya Total ($)", fontsize=10)
+    ax.set_title("Optimasi Biaya Inventory", fontsize=12, pad=20)
+    ax.legend(frameon=True, facecolor='#f0f0f0')
+    ax.grid(True, linestyle='--', alpha=0.7)
+    ax.set_facecolor('#f5f5f5')
 
-# ================== RESULT SECTION ==================
-st.subheader("📊 Hasil Perhitungan", divider="gray")
-result_col1, result_col2 = st.columns(2)
-with result_col1:
-    st.metric(label="**EOQ Optimal**", value=f"{Q:.2f} unit")
-with result_col2:
-    st.metric(label="**Biaya Total Minimum**", value=f"${TC:.2f}")
+    # ================== RESULT SECTION ==================
+    st.subheader("📊 Hasil Perhitungan", divider="gray")
+    result_col1, result_col2 = st.columns(2)
+    with result_col1:
+        st.metric(label="**EOQ Optimal**", value=f"{Q:.2f} unit")
+    with result_col2:
+        st.metric(label="**Biaya Total Minimum**", value=f"${TC:.2f}")
 
-st.pyplot(fig)
-
+    st.pyplot(fig)
 
 with tab3:  # M/M/1 Queue
     st.header("Model Antrian M/M/1")
