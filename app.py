@@ -32,8 +32,7 @@ tab1, tab2, tab3, tab4 = st.tabs(["Optimasi Produksi", "Model Persediaan", "Mode
 
 with tab1:
     st.title("🏭 Optimasi Produksi - PT. Sinar Terang")
-  st.set_page_config(page_title="Optimasi Produksi - PT. Sinar Terang", layout="centered")
-
+  
 st.markdown("""
 Aplikasi ini membantu PT. Sinar Terang menentukan jumlah produksi optimal untuk dua produk:
 - Produk A: Blender
