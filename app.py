@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import sqrt
 from scipy.optimize import linprog
-import sympy as sp
 
 st.set_page_config(
     page_title="Industrial Math Models",
@@ -250,6 +249,3 @@ st.markdown(
     unsafe_allow_html=True
 )
 st.caption("Aplikasi Model Matematika Industri | PT. Sinar Terang — Versi 2025")
-
-if __name__ == "__main__":
-    st.write("Aplikasi Model Matematika Industri")
