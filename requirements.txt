@@ -3,4 +3,5 @@ numpy
 matplotlib
 pulp
 linprog
+sqrl
 sympy
