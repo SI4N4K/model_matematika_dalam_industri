@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pulp
 from math import sqrt
+from scipy.optimize import linprog
+import sympy as sp
 
 st.set_page_config(page_title="Industrial Math Models", layout="wide")
 
@@ -30,46 +32,80 @@ st.sidebar.markdown("""
 tab1, tab2, tab3, tab4 = st.tabs(["Optimasi Produksi", "Model Persediaan", "Model Antrian", "Model Lain"])
 
 with tab1:  # Linear Programming
-    st.header("Optimasi Produksi Linear Programming")
-    
-    # Input Fungsi Tujuan
+
+st.set_page_config(page_title="Optimasi Produksi - PT. Sinar Terang", layout="centered")
+st.title("🏭 Optimasi Produksi - PT. Sinar Terang")
+
+st.markdown("""
+Aplikasi ini membantu PT. Sinar Terang menentukan jumlah produksi optimal untuk dua produk:
+- Produk A: Blender
+- Produk B: Pemanggang Roti
+
+Tujuannya adalah untuk memaksimalkan keuntungan, dengan batasan waktu mesin yang tersedia per minggu.
+""")
+
+with st.form("input_form"):
+    st.subheader("🔧 Masukkan Parameter Produksi")
+
     col1, col2 = st.columns(2)
+
     with col1:
-        st.subheader("Fungsi Tujuan")
-        c1 = st.number_input("Koefisien X1 (Profit)", value=3)
-        c2 = st.number_input("Koefisien X2 (Profit)", value=2)
+        profit_A = st.number_input("Keuntungan per unit Blender (Rp)", value=40000, step=1000, min_value=0)
+        time_A = st.number_input("Jam mesin per unit Blender", value=2.0, step=0.1, min_value=0.1)
     
-    # Input Kendala
     with col2:
-        st.subheader("Kendala Produksi")
-        a1 = st.number_input("Koefisien X1 (Kendala 1)", value=1)
-        a2 = st.number_input("Koefisien X2 (Kendala 1)", value=1)
-        b = st.number_input("Kapasitas Maksimum", value=100)
+        profit_B = st.number_input("Keuntungan per unit Pemanggang Roti (Rp)", value=60000, step=1000, min_value=0)
+        time_B = st.number_input("Jam mesin per unit Pemanggang Roti", value=3.0, step=0.1, min_value=0.1)
     
-    # Solve LP Problem
-    prob = pulp.LpProblem("Max_Profit", pulp.LpMaximize)
-    x1 = pulp.LpVariable("x1", lowBound=0)
-    x2 = pulp.LpVariable("x2", lowBound=0)
-    prob += c1*x1 + c2*x2, "Profit"
-    prob += a1*x1 + a2*x2 <= b, "Kendala Kapasitas"
-    
-    prob.solve()
-    
-    # Visualisasi Hasil
-    fig, ax = plt.subplots()
-    x = np.linspace(0, b/a1, 100)
-    y = (b - a1*x)/a2
-    ax.plot(x, y, label='Kendala Produksi')
-    ax.fill_between(x, 0, y, alpha=0.1)
-    ax.scatter(x1.value(), x2.value(), color='red', label='Solusi Optimal')
-    ax.set_xlabel("X1")
-    ax.set_ylabel("X2")
-    ax.legend()
-    
-    st.subheader("Solusi Optimal")
-    st.write(f"X1 = {x1.value():.2f}, X2 = {x2.value():.2f}")
-    st.write(f"Profit Maksimum: ${pulp.value(prob.objective):.2f}")
-    st.pyplot(fig)
+    total_time = st.number_input("Total jam mesin tersedia per minggu", value=100.0, step=1.0, min_value=1.0)
+
+    submitted = st.form_submit_button("🔍 Hitung Produksi Optimal")
+
+if submitted:
+    c = [-profit_A, -profit_B]
+    A = [[time_A, time_B]]
+    b = [total_time]
+    bounds = [(0, None), (0, None)]
+
+    result = linprog(c, A_ub=A, b_ub=b, bounds=bounds, method='highs')
+
+    st.subheader("📊 Hasil Optimasi")
+
+    if result.success:
+        x = result.x[0]
+        y = result.x[1]
+        max_profit = -result.fun
+
+        st.success("Solusi optimal ditemukan ✅")
+        st.write(f"🔹 Jumlah Blender (Produk A): **{x:.2f} unit")
+        st.write(f"🔹 Jumlah Pemanggang Roti (Produk B): **{y:.2f} unit")
+        st.write(f"💰 Total keuntungan maksimal: Rp {max_profit:,.0f}")
+
+        # ===== VISUALISASI =====
+        st.subheader("📉 Visualisasi Daerah Solusi & Titik Optimal")
+
+        fig, ax = plt.subplots(figsize=(7, 5))
+
+        x_vals = np.linspace(0, total_time / time_A + 5, 400)
+        y_vals = (total_time - time_A * x_vals) / time_B
+        y_vals = np.maximum(0, y_vals)
+
+        ax.plot(x_vals, y_vals, label="Batas Waktu Mesin", color="blue")
+        ax.fill_between(x_vals, 0, y_vals, alpha=0.2, color="blue", label="Daerah Feasible")
+
+        ax.scatter(x, y, color="red", zorder=5, label="Solusi Optimal")
+        ax.set_xlim(left=0)
+        ax.set_ylim(bottom=0)
+        ax.set_xlabel("Unit Blender (Produk A)")
+        ax.set_ylabel("Unit Pemanggang Roti (Produk B)")
+        ax.set_title("Visualisasi Optimasi Produksi")
+        ax.legend()
+        ax.grid(True)
+
+        st.pyplot(fig)
+
+    else:
+        st.error("❌ Gagal menemukan solusi optimal.")
 
 with tab2:  # EOQ Model
     st.header("📦 Kalkulator EOQ", divider="rainbow")
