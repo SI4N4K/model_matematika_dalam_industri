@@ -105,7 +105,6 @@ if submitted:
         st.error("❌ Gagal menemukan solusi optimal.")
 with tab2:
         st.header("📦 Kalkulator EOQ", divider="rainbow")
-    with st.expander("ℹ️ Tentang Aplikasi"):
         st.write("""
         Aplikasi ini menghitung Economic Order Quantity (EOQ) dan visualisasi biaya total
         menggunakan rumus:  
