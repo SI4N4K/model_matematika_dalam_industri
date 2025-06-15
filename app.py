@@ -28,13 +28,11 @@ st.sidebar.markdown("""
 - Analisis sensitivitas parameter
 """)
 
-# Inisialisasi Tab
 tab1, tab2, tab3, tab4 = st.tabs(["Optimasi Produksi", "Model Persediaan", "Model Antrian", "Model Lain"])
 
-with tab1:  # Linear Programming
-
-st.set_page_config(page_title="Optimasi Produksi - PT. Sinar Terang", layout="centered")
-st.title("🏭 Optimasi Produksi - PT. Sinar Terang")
+with tab1:
+    st.title("🏭 Optimasi Produksi - PT. Sinar Terang")
+  st.set_page_config(page_title="Optimasi Produksi - PT. Sinar Terang", layout="centered")
 
 st.markdown("""
 Aplikasi ini membantu PT. Sinar Terang menentukan jumlah produksi optimal untuk dua produk:
@@ -106,9 +104,8 @@ if submitted:
 
     else:
         st.error("❌ Gagal menemukan solusi optimal.")
-
-with tab2:  # EOQ Model
-    st.header("📦 Kalkulator EOQ", divider="rainbow")
+with tab2:
+        st.header("📦 Kalkulator EOQ", divider="rainbow")
     with st.expander("ℹ️ Tentang Aplikasi"):
         st.write("""
         Aplikasi ini menghitung Economic Order Quantity (EOQ) dan visualisasi biaya total
@@ -165,9 +162,8 @@ with tab2:  # EOQ Model
         st.metric(label="**Biaya Total Minimum**", value=f"Rp.{TC:.2f}")
 
     st.pyplot(fig)
-
-with tab3:  # M/M/1 Queue
-    st.header("Model Antrian M/M/1")
+with tab3:
+     st.header("Model Antrian M/M/1")
     
     lambda_ = st.number_input("Tingkat Kedatangan (λ)", value=0.5)
     mu = st.number_input("Tingkat Pelayanan (μ)", value=0.6)
@@ -202,8 +198,9 @@ with tab3:  # M/M/1 Queue
     st.write(f"Rata-rata Pelanggan dalam Antrian (Lq): {Lq:.2f}")
     st.write(f"Rata-rata Waktu Tunggu (Wq): {Wq:.2f} menit")
 
-with tab4:  # Other Models
-    st.header("Break-even Point Analysis")
+
+with tab4:
+  st.header("Break-even Point Analysis")
     
     fixed_cost = st.number_input("Biaya Tetap ($)", value=5000)
     variable_cost = st.number_input("Biaya Variabel per Unit ($)", value=10)
@@ -227,5 +224,7 @@ with tab4:  # Other Models
     st.write(f"Break-even Point: {break_even:.2f} unit")
     st.pyplot(fig)
 
+if __name__ == "__main__":
+    st.write("Aplikasi Model Matematika Industri")
 if __name__ == "__main__":
     st.write("Aplikasi Model Matematika Industri")
