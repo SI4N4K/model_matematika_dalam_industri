@@ -2,6 +2,6 @@ streamlit
 numpy
 matplotlib
 pulp
+sqrt
 linprog
-sqrl
 sympy
